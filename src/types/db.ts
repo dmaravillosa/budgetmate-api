@@ -12,3 +12,12 @@ export interface UserRecord {
 }
 
 export type Db = Knex;
+
+export interface ExpenseRecord {
+  id: number;
+  name: string;
+  value: string;
+  created_by: number;
+  created_at: Date;
+  updated_at: Date;
+}
