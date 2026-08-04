@@ -20,6 +20,20 @@ app.get('/health', async (_req: Request, res: Response) => {
   }
 });
 
+// centralized error handler
+app.use((err: unknown, _req: Request, res: Response, _next: any) => {
+  /* eslint-disable no-console */
+  console.error(err instanceof Error ? err.stack ?? err.message : err);
+  /* eslint-enable no-console */
+
+  if (err && typeof (err as any).status === 'number') {
+    const e = err as any;
+    return res.status(e.status).json({ error: e.message });
+  }
+
+  res.status(500).json({ error: err instanceof Error ? err.message : 'Internal Server Error' });
+});
+
 app.listen(port, () => {
   console.log(`Server running on http://localhost:${port}`);
 });

@@ -43,4 +43,8 @@ router.get('/google/failure', (_req: Request, res: Response) => {
   res.status(401).json({ error: 'Google authentication failed' });
 });
 
+router.post('/logout', (_req: Request, res: Response) => {
+  res.status(200).json({ message: 'Logged out successfully' });
+});
+
 export default router;
