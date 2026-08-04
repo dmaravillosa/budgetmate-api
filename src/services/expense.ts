@@ -1,5 +1,6 @@
 import db from '../config/db';
 import { ExpenseRecord } from '../types/db';
+import { UserRecord } from '../types/db';
 
 export async function getAllExpenses(): Promise<ExpenseRecord[]> {
   return db<ExpenseRecord>('expenses').select('*').orderBy('id', 'asc');
@@ -7,6 +8,24 @@ export async function getAllExpenses(): Promise<ExpenseRecord[]> {
 
 export async function getExpenseById(id: number): Promise<ExpenseRecord | undefined> {
   return db<ExpenseRecord>('expenses').where({ id }).first();
+}
+
+export async function getUsersForExpense(expenseId: number): Promise<UserRecord[]> {
+  return db<UserRecord>('users')
+    .join('expense_users', 'users.id', 'expense_users.user_id')
+    .where('expense_users.expense_id', expenseId)
+    .select('users.*');
+}
+
+export async function addUserToExpense(expenseId: number, userId: number): Promise<void> {
+  await db('expense_users').insert({
+    expense_id: expenseId,
+    user_id: userId,
+  });
+}
+
+export async function removeUserFromExpense(expenseId: number, userId: number): Promise<number> {
+  return db('expense_users').where({ expense_id: expenseId, user_id: userId }).del();
 }
 
 export async function createExpense(data: Partial<ExpenseRecord>): Promise<ExpenseRecord> {
@@ -41,6 +60,9 @@ export async function deleteExpense(id: number): Promise<number> {
 export default {
   getAllExpenses,
   getExpenseById,
+  getUsersForExpense,
+  addUserToExpense,
+  removeUserFromExpense,
   createExpense,
   updateExpense,
   deleteExpense,

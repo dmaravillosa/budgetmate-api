@@ -55,10 +55,46 @@ export async function deleteExpenseHandler(req: Request, res: Response) {
   res.status(204).send();
 }
 
+export async function listUsersForExpense(req: Request, res: Response) {
+  const expenseId = Number(req.params.id);
+
+  if (Number.isNaN(expenseId)) throw new HttpError(400, 'Invalid expense id');
+
+  const users = await expenseService.getUsersForExpense(expenseId);
+  res.json(users);
+}
+
+export async function addUserToExpense(req: Request, res: Response) {
+  const expenseId = Number(req.params.id);
+  const { user_id } = req.body;
+
+  if (Number.isNaN(expenseId)) throw new HttpError(400, 'Invalid expense id');
+  if (!user_id || Number.isNaN(Number(user_id))) throw new HttpError(400, 'Missing or invalid user_id');
+
+  await expenseService.addUserToExpense(expenseId, Number(user_id));
+  res.status(201).json({ expense_id: expenseId, user_id: Number(user_id) });
+}
+
+export async function removeUserFromExpense(req: Request, res: Response) {
+  const expenseId = Number(req.params.id);
+  const userId = Number(req.params.userId);
+
+  if (Number.isNaN(expenseId) || Number.isNaN(userId)) throw new HttpError(400, 'Invalid expense id or user id');
+
+  const deleted = await expenseService.removeUserFromExpense(expenseId, userId);
+
+  if (!deleted) throw new HttpError(404, 'Expense-user association not found');
+
+  res.status(204).send();
+}
+
 export default {
   listExpenses,
   getExpense,
   createExpense,
   updateExpenseHandler,
   deleteExpenseHandler,
+  listUsersForExpense,
+  addUserToExpense,
+  removeUserFromExpense,
 };

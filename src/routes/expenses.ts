@@ -10,4 +10,8 @@ router.post('/', asyncHandler(expenseCtrl.createExpense));
 router.put('/:id', asyncHandler(expenseCtrl.updateExpenseHandler));
 router.delete('/:id', asyncHandler(expenseCtrl.deleteExpenseHandler));
 
+router.get('/:id/users', asyncHandler(expenseCtrl.listUsersForExpense));
+router.post('/:id/users', asyncHandler(expenseCtrl.addUserToExpense));
+router.delete('/:id/users/:userId', asyncHandler(expenseCtrl.removeUserFromExpense));
+
 export default router;
