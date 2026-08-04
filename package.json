@@ -1,0 +1,35 @@
+{
+  "name": "budgetmate-api",
+  "version": "1.0.0",
+  "description": "",
+  "license": "ISC",
+  "author": "",
+  "type": "commonjs",
+  "main": "dist/server.js",
+  "scripts": {
+    "build": "tsc --project tsconfig.json",
+    "start": "node dist/server.js",
+    "dev": "nodemon --watch src --ext ts --exec \"npm run build && node dist/server.js\"",
+    "migrate:make": "npx knex migrate:make",
+    "migrate:latest": "npx knex migrate:latest --knexfile ./knexfile.js",
+    "migrate:rollback": "npx knex migrate:rollback --knexfile ./knexfile.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "dotenv": "^10.0.0",
+    "express": "^5.2.1",
+    "jsonwebtoken": "^9.0.0",
+    "knex": "^3.3.0",
+    "mysql2": "^3.23.2",
+    "passport": "^0.6.0",
+    "passport-google-oauth20": "^2.0.0"
+  },
+  "devDependencies": {
+    "@types/express": "^5.0.6",
+    "@types/node": "^26.1.2",
+    "@types/passport-google-oauth20": "^2.0.10",
+    "@types/jsonwebtoken": "^9.0.2",
+    "nodemon": "^3.0.1",
+    "typescript": "^7.0.2"
+  }
+}
