@@ -99,6 +99,9 @@ router.post('/', asyncHandler(expenseCtrl.createExpense));
  *                 type: string
  *               value:
  *                 type: string
+ *               calculation_type:
+ *                 type: string
+ *                 enum: ['equal', 'split', 'percentage']
  *     responses:
  *       200:
  *         description: Updated expense
@@ -199,6 +202,51 @@ router.get('/:id/users', asyncHandler(expenseCtrl.listUsersForExpense));
  *               $ref: '#/components/schemas/ExpenseUser'
  */
 router.post('/:id/users', asyncHandler(expenseCtrl.addUserToExpense));
+
+/**
+ * @openapi
+ * /expenses/{id}/splits:
+ *   post:
+ *     summary: Calculate and store expense splits
+ *     tags:
+ *       - Expenses
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *     requestBody:
+ *       required: false
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               percentages:
+ *                 type: array
+ *                 items:
+ *                   type: object
+ *                   properties:
+ *                     user_id:
+ *                       type: integer
+ *                     percentage:
+ *                       type: number
+ *                   required:
+ *                     - user_id
+ *                     - percentage
+ *             description: Required only for percentage calculation type.
+ *     responses:
+ *       200:
+ *         description: Calculated expense splits
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/ExpenseSplit'
+ */
+router.post('/:id/splits', asyncHandler(expenseCtrl.calculateExpenseSplits));
 
 /**
  * @openapi
