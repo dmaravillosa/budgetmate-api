@@ -21,18 +21,26 @@ const swaggerOptions = {
           properties: {
             id: { type: 'integer' },
             name: { type: 'string' },
-            value: { type: 'string' },
+            value: { type: 'integer' },
+            calculation_type: {
+              type: 'string',
+              enum: ['equal', 'split', 'percentage'],
+            },
             created_by: { type: 'integer' },
             created_at: { type: 'string', format: 'date-time' },
             updated_at: { type: 'string', format: 'date-time' },
           },
-          required: ['id', 'name', 'value', 'created_by', 'created_at', 'updated_at'],
+          required: ['id', 'name', 'value', 'calculation_type', 'created_by', 'created_at', 'updated_at'],
         },
         ExpenseCreate: {
           type: 'object',
           properties: {
             name: { type: 'string' },
-            value: { type: 'string' },
+            value: { type: 'integer' },
+            calculation_type: {
+              type: 'string',
+              enum: ['equal', 'split', 'percentage'],
+            },
             created_by: { type: 'integer' },
           },
           required: ['name', 'value', 'created_by'],
@@ -44,6 +52,17 @@ const swaggerOptions = {
             user_id: { type: 'integer' },
           },
           required: ['expense_id', 'user_id'],
+        },
+        ExpenseSplit: {
+          type: 'object',
+          properties: {
+            id: { type: 'integer' },
+            expense_id: { type: 'integer' },
+            user_id: { type: 'integer' },
+            split_value: { type: 'integer' },
+            created_at: { type: 'string', format: 'date-time' },
+          },
+          required: ['id', 'expense_id', 'user_id', 'split_value', 'created_at'],
         },
         ErrorResponse: {
           type: 'object',

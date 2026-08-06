@@ -9,6 +9,7 @@ export interface ExpenseWithUsers {
   id: number;
   name: string;
   value: string;
+  calculation_type: 'equal' | 'split' | 'percentage';
   created_by: number;
   created_at: Date;
   updated_at: Date;
