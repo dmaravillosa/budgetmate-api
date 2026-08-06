@@ -5,6 +5,17 @@ import { AuthUser } from '../types/auth';
 
 const router = Router();
 
+/**
+ * @openapi
+ * /auth/google:
+ *   get:
+ *     summary: Start Google OAuth login
+ *     tags:
+ *       - Auth
+ *     responses:
+ *       302:
+ *         description: Redirect to Google for authentication
+ */
 router.get(
   '/google',
   passport.authenticate('google', {
@@ -12,6 +23,19 @@ router.get(
   })
 );
 
+/**
+ * @openapi
+ * /auth/google/callback:
+ *   get:
+ *     summary: Google OAuth callback
+ *     tags:
+ *       - Auth
+ *     responses:
+ *       200:
+ *         description: Authenticated user with JWT token
+ *       401:
+ *         description: Authentication failed
+ */
 router.get(
   '/google/callback',
   passport.authenticate('google', { session: false, failureRedirect: '/auth/google/failure' }),
