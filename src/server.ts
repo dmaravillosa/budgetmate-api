@@ -1,7 +1,9 @@
 import 'dotenv/config';
 import express, { type Request, type Response } from 'express';
 import passport from 'passport';
+import swaggerUi from 'swagger-ui-express';
 import router from './routes/index';
+import swaggerSpec from './openapi';
 import db from './config/db';
 
 const app = express();
@@ -9,6 +11,8 @@ const port = process.env.PORT || 3000;
 
 app.use(express.json());
 app.use(passport.initialize());
+app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+app.get('/openapi.json', (_req: Request, res: Response) => res.json(swaggerSpec));
 app.use('/', router);
 
 app.get('/health', async (_req: Request, res: Response) => {
