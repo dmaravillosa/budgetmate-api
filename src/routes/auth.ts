@@ -4,6 +4,7 @@ import { createJwtToken } from '../services/auth';
 import { AuthUser } from '../types/auth';
 
 const router = Router();
+const frontendRedirectUrl = process.env.FRONTEND_REDIRECT_URL || 'http://localhost:8000/dashboard';
 
 /**
  * @openapi
@@ -47,19 +48,10 @@ router.get(
     }
 
     const tokenData = createJwtToken(user);
+    const dashboardUrl = new URL(frontendRedirectUrl);
+    dashboardUrl.searchParams.set('token', tokenData.token);
 
-    res.status(200).json({
-      user: {
-        id: user.id,
-        googleId: user.google_id,
-        email: user.email,
-        displayName: user.display_name,
-        provider: user.provider,
-        avatarUrl: user.avatar_url,
-      },
-      token: tokenData.token,
-      expiresIn: tokenData.expiresIn,
-    });
+    return res.redirect(dashboardUrl.toString());
   }
 );
 
